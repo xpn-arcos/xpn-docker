@@ -322,6 +322,64 @@ xpn_docker_start ()
         fi
 }
 
+xpn_docker_reconfigure ()
+{
+        # get uid/gid
+        HOST_UID_VALUE=$(id -u)
+        HOST_GID_VALUE=$(id -g)
+        N_ELTOS=$1
+
+        # Check swarm active -> multi-node
+        MODE=SINGLE_NODE
+        if [ -f .xpn_docker_swarm ]; then
+            MODE=MULTI_NODE
+        fi
+
+        # single/multi
+        if [ "$MODE" == "SINGLE_NODE" ]; then
+
+                # Start container cluster (single node)
+                echo "Building containers..."
+                HOST_UID=$HOST_UID_VALUE HOST_GID=$HOST_GID_VALUE docker compose -f docker/dockercompose.yml -p $DOCKER_PREFIX_NAME up -d --scale node=$N_ELTOS
+                if [ $? -gt 0 ]; then
+                    echo ": The docker compose command failed to spin up containers."
+                    echo ": * Did you execute git clone https://github.com/xpn-arcos/xpn-docker.git ?."
+                    echo ""
+                    exit
+                fi
+
+                # Containers machine file
+                xpn_docker_machines_create "SINGLE_NODE"
+
+                # Update /etc/hosts on each node
+                CONTAINER_ID_LIST=$(docker ps -f name=docker -q)
+                for C in $CONTAINER_ID_LIST; do
+                    docker container exec -it $C /work/lab-home/bin/hosts_update.sh
+                done
+
+        fi
+        if [ "$MODE" == "MULTI_NODE" ]; then
+
+                # Start container cluster (multi node)
+                HOST_UID=$HOST_UID_VALUE HOST_GID=$HOST_GID_VALUE docker stack deploy --compose-file docker/dockerstack.yml $DOCKER_PREFIX_NAME
+                if [ $? -gt 0 ]; then
+                    echo ": The docker stack deploy command failed to spin up containers."
+                    echo ""
+                    exit
+                fi
+
+                docker service scale xpn_docker_node=$N_ELTOS
+                if [ $? -gt 0 ]; then
+                    echo ": The docker service scale command failed to spin up containers."
+                    echo ""
+                    exit
+                fi
+
+                # Containers machine file
+                xpn_docker_machines_create "MULTI_NODE"
+        fi
+}
+
 xpn_docker_stop ()
 {
         # get uid/gid
@@ -506,6 +564,14 @@ do
                 NN=$1
 
                 xpn_docker_start $NN
+             ;;
+
+             reconfigure)
+                # Get parameters
+                shift
+                NN=$1
+
+                xpn_docker_reconfigure $NN
              ;;
 
              stop)
