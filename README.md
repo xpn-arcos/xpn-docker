@@ -6,17 +6,48 @@
 
 ## Contents
 
- 1. [Summary of using xpn-docker](/docs/summary.md)
- 2. [Build the container image](/docs/image.md)
- 3. Some xpn-docker use cases:
+ 1. [Prerequisites](#1-prerequisites)
+ 2. [Summary of using xpn-docker](/docs/summary.md)
+ 3. [Build the container image](/docs/image.md)
+ 4. Some xpn-docker use cases:
     1. [Examples using XPN Ad-Hoc](/docs/usecase-xpn.md)
     2. [Examples of benchmarks with XPN Ad-Hoc](/docs/usecase-benchmarks.md)
     3. [Example  of Apache Spark and Ad-Hoc XPN](/docs/usecase-spark.md)
- 4. [Multiple containers on multiple nodes](/docs/swarm.md)
- 5. [Authors](/docs/authors.md)
+ 5. [Multiple containers on multiple nodes](/docs/swarm.md)
+ 6. [Authors](/docs/authors.md)
 
 
-## 1. Summary xpn-docker options
+## 1. Prerequisites
+
+* Windows:
+  * WSL: https://docs.docker.com/desktop/setup/install/windows-install/#wsl-verification-and-setup
+  * docker desktop: https://docs.docker.com/desktop/setup/install/windows-install/
+* MacOS (docker desktop): https://docs.docker.com/desktop/setup/install/mac-install/
+* Linux (docker): https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+  ```bash
+  : Add Docker's official GPG key:
+  sudo apt update
+  sudo apt install ca-certificates curl
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+  : Add the repository to Apt sources:
+  sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+  Types: deb
+  URIs: https://download.docker.com/linux/ubuntu
+  Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+  Components: stable
+  Signed-By: /etc/apt/keyrings/docker.asc
+  EOF
+
+  : Update repo and install docker
+  sudo apt update
+  sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+  ```
+
+
+## 2. Summary xpn-docker options
 
   <html>
   <table>
@@ -118,7 +149,7 @@
 
 
 
-## 2. Build the container image
+## 3. Build the container image
 
 The first time xpn-docker is deployed or when the ```docker/dockerfile``` is updated we need to build the container image.
 
@@ -141,9 +172,9 @@ The first time xpn-docker is deployed or when the ```docker/dockerfile``` is upd
 
 
 
-## 3. Some xpn-docker use cases
+## 4. Some xpn-docker use cases
 
-### 3.1 Example of using Expand with native API, with LD_PRELOAD (bypass), and with FUSE
+### 4.1 Example of using Expand with native API, with LD_PRELOAD (bypass), and with FUSE
 
    <br>
    <html>
@@ -234,7 +265,7 @@ The first time xpn-docker is deployed or when the ```docker/dockerfile``` is upd
    4. Stopping all containers
 
 
-### 3.2 Examples of benchmarks with XPN Ad-Hoc
+### 4.2 Examples of benchmarks with XPN Ad-Hoc
 
   <html>
   <table>
@@ -288,7 +319,7 @@ IOR
   </html>
 
 
-### 3.3 Example of Ad-Hoc XPN with Apache Spark
+### 4.3 Example of Ad-Hoc XPN with Apache Spark
 
 <html>
  <table>
@@ -321,7 +352,7 @@ IOR
 </html>
 
 
-## 4. Multiple containers on multiple nodes
+## 5. Multiple containers on multiple nodes
 
    An example using multiples nodes is:
    ```bash
