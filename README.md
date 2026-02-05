@@ -2,6 +2,7 @@
 
 ![Workflow](https://github.com/xpn-arcos/xpn-docker/actions/workflows/xpn_docker_workflow.yml/badge.svg)
 ![License](https://img.shields.io/github/license/xpn-arcos/xpn-docker)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/116b10e7f3be40cbb99248b30266a19a)](https://app.codacy.com/gh/xpn-arcos/xpn-docker/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 
 ## Contents
