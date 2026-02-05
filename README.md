@@ -1,7 +1,7 @@
-# xpn-docker: Expand Docker
+# Expand Docker
 
-[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
-[![Release](https://img.shields.io/badge/Stable-3.3-green.svg)](https://github.com/xpn-arcos/xpn-docker/releases/tag/v3.3)
+![Workflow](https://github.com/xpn-arcos/xpn-docker/actions/workflows/xpn_docker_workflow.yml/badge.svg)
+![License](https://img.shields.io/github/license/xpn-arcos/xpn-docker)
 
 
 ## Contents
